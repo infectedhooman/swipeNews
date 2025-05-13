@@ -7,6 +7,7 @@ import NewsCard from '@/components/NewsCard';
 import SavedArticles from '@/components/SavedArticles';
 import EmptyState from '@/components/EmptyState';
 import LoadingState from '@/components/LoadingState';
+import NewsChat from '@/components/NewsChat';
 import { useToast } from '@/components/ui/use-toast';
 
 const Index = () => {
@@ -14,6 +15,7 @@ const Index = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [savedArticles, setSavedArticles] = useState<Article[]>([]);
   const [showSaved, setShowSaved] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
@@ -106,6 +108,10 @@ const Index = () => {
     setSavedArticles(savedArticles.filter(article => article.url !== articleUrl));
   };
 
+  const handleOpenChat = () => {
+    setShowChat(true);
+  };
+
   const currentArticle = articles[currentIndex];
   const hasArticles = articles.length > 0;
   const hasMoreArticles = currentIndex < articles.length;
@@ -136,7 +142,8 @@ const Index = () => {
           <NewsCard 
             article={currentArticle} 
             onSwipeLeft={handleSwipeLeft} 
-            onSwipeRight={handleSwipeRight} 
+            onSwipeRight={handleSwipeRight}
+            onOpenChat={handleOpenChat}
           />
         )}
         
@@ -146,6 +153,10 @@ const Index = () => {
             onRemove={handleRemoveSaved} 
             onClose={() => setShowSaved(false)} 
           />
+        )}
+
+        {showChat && (
+          <NewsChat onClose={() => setShowChat(false)} />
         )}
       </div>
     </div>
