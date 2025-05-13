@@ -85,19 +85,21 @@ const mockArticles: Article[] = [
 
 // Generate more mock articles for testing pagination
 const generateMoreMockArticles = (page: number): Article[] => {
-  return Array(5).fill(null).map((_, idx) => ({
+  console.log(`Generating mock articles for page ${page}`);
+  return Array(10).fill(null).map((_, idx) => ({
     source: { id: `source-${page}-${idx}`, name: `Source ${page}.${idx}` },
     author: `Author ${page}.${idx}`,
     title: `News Article ${page}.${idx}: Breaking development in tech and science`,
     description: `This is a generated article for page ${page}, item ${idx}. It contains mock content for testing pagination.`,
     url: `https://example.com/article-${page}-${idx}`,
-    urlToImage: `https://picsum.photos/id/${(page * 5 + idx) % 30 + 10}/600/400`,
-    publishedAt: new Date(Date.now() - (page * 5 + idx) * 3600000).toISOString(),
+    urlToImage: `https://picsum.photos/id/${(page * 10 + idx) % 30 + 10}/600/400`,
+    publishedAt: new Date(Date.now() - (page * 10 + idx) * 3600000).toISOString(),
     content: `Detailed content for article ${page}.${idx}. This would be the full article text in a real application.`
   }));
 };
 
 export const fetchTopHeadlines = async (page: number = 1): Promise<Article[]> => {
+  console.log(`Fetching top headlines for page ${page}`);
   // In a real app, this would call the News API with pagination
   // const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&page=${page}&apiKey=${API_KEY}`);
   // const data: NewsResponse = await response.json();
@@ -108,12 +110,14 @@ export const fetchTopHeadlines = async (page: number = 1): Promise<Article[]> =>
       // For the first page, return our predefined mock articles
       // For subsequent pages, generate more mock articles
       const articles = page === 1 ? mockArticles : generateMoreMockArticles(page);
+      console.log(`Returning ${articles.length} articles for page ${page}`);
       resolve(articles);
     }, 500); // Simulate network delay
   });
 };
 
 export const searchNews = async (query: string, page: number = 1): Promise<Article[]> => {
+  console.log(`Searching news for query "${query}" on page ${page}`);
   // In a real app, this would call the News API with the search query and pagination
   // const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&page=${page}&apiKey=${API_KEY}`);
   // const data: NewsResponse = await response.json();
@@ -128,6 +132,7 @@ export const searchNews = async (query: string, page: number = 1): Promise<Artic
             article.title.toLowerCase().includes(query.toLowerCase()) || 
             (article.description && article.description.toLowerCase().includes(query.toLowerCase()))
         );
+        console.log(`Returning ${filteredArticles.length} search results for page 1`);
         resolve(filteredArticles);
       } else {
         // For subsequent pages, generate mock search results
@@ -136,6 +141,7 @@ export const searchNews = async (query: string, page: number = 1): Promise<Artic
           title: `${query} related news ${page}.${Math.floor(Math.random() * 10)}: ${article.title}`,
           description: `Search results for "${query}": ${article.description}`
         }));
+        console.log(`Returning ${searchResults.length} search results for page ${page}`);
         resolve(searchResults);
       }
     }, 500); // Simulate network delay

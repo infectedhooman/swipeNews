@@ -33,7 +33,9 @@ const Index = () => {
     setCurrentPage(1);
     setHasMore(true);
     try {
+      console.log("Loading initial headlines");
       const headlines = await fetchTopHeadlines(1);
+      console.log(`Loaded ${headlines.length} initial headlines`);
       setArticles(headlines);
       setCurrentIndex(0);
     } catch (error) {
@@ -55,7 +57,9 @@ const Index = () => {
     setCurrentPage(1);
     setHasMore(true);
     try {
+      console.log(`Searching for "${query}"`);
       const results = await searchNews(query, 1);
+      console.log(`Search returned ${results.length} results`);
       setArticles(results);
       setCurrentIndex(0);
     } catch (error) {
@@ -74,14 +78,19 @@ const Index = () => {
   const loadMoreArticles = useCallback(async () => {
     if (loadingMore || !hasMore) return;
     
+    console.log("Loading more articles");
     setLoadingMore(true);
     try {
       const nextPage = currentPage + 1;
+      console.log(`Fetching page ${nextPage}`);
       const newArticles = searchQuery 
         ? await searchNews(searchQuery, nextPage)
         : await fetchTopHeadlines(nextPage);
       
+      console.log(`Loaded ${newArticles.length} more articles`);
+      
       if (newArticles.length === 0) {
+        console.log("No more articles to load");
         setHasMore(false);
         return;
       }
@@ -102,16 +111,21 @@ const Index = () => {
 
   // Check if we need to load more articles when user is getting close to the end
   useEffect(() => {
-    const threshold = 2; // Load more when only 2 articles left
-    if (articles.length - currentIndex <= threshold && hasMore && !loading) {
+    const threshold = 3; // Load more when only 3 articles left (increased from 2)
+    console.log(`Current index: ${currentIndex}, Articles length: ${articles.length}, Threshold: ${threshold}`);
+    
+    if (articles.length > 0 && articles.length - currentIndex <= threshold && hasMore && !loading && !loadingMore) {
+      console.log("Threshold reached, loading more articles");
       loadMoreArticles();
     }
-  }, [currentIndex, articles.length, hasMore, loadMoreArticles, loading]);
+  }, [currentIndex, articles.length, hasMore, loadMoreArticles, loading, loadingMore]);
 
   const handleSwipeLeft = () => {
+    console.log(`Swiping left, current index: ${currentIndex}`);
     // Dismiss article
     if (currentIndex < articles.length - 1) {
       setCurrentIndex(currentIndex + 1);
+      console.log(`New index after swipe: ${currentIndex + 1}`);
     } else if (hasMore) {
       // No more articles but we're trying to load more
       toast({
@@ -130,6 +144,7 @@ const Index = () => {
   };
 
   const handleSwipeRight = () => {
+    console.log(`Swiping right, current index: ${currentIndex}`);
     // Save article
     const currentArticle = articles[currentIndex];
     
@@ -143,6 +158,7 @@ const Index = () => {
     
     if (currentIndex < articles.length - 1) {
       setCurrentIndex(currentIndex + 1);
+      console.log(`New index after swipe: ${currentIndex + 1}`);
     } else if (hasMore) {
       // No more articles but we're trying to load more
       toast({
