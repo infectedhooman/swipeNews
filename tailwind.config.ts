@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -84,11 +85,26 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'swipe-right': {
+					from: { transform: 'translateX(0) rotate(0)', opacity: '1' },
+					to: { transform: 'translateX(150%) rotate(30deg)', opacity: '0' }
+				},
+				'swipe-left': {
+					from: { transform: 'translateX(0) rotate(0)', opacity: '1' },
+					to: { transform: 'translateX(-150%) rotate(-30deg)', opacity: '0' }
+				},
+				'card-in': {
+					from: { transform: 'translateY(20px)', opacity: '0' },
+					to: { transform: 'translateY(0)', opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'swipe-right': 'swipe-right 0.5s forwards ease-out',
+				'swipe-left': 'swipe-left 0.5s forwards ease-out',
+				'card-in': 'card-in 0.3s forwards ease-out'
 			}
 		}
 	},
