@@ -20,6 +20,9 @@ _A Modern AI-Powered Personalized News App_
 - **Saved Articles Collection**
 - **Responsive, Mobile-First UI**
 
+- <img width="472" alt="image" src="https://github.com/user-attachments/assets/bbdf9064-c948-4dc4-ac53-4a30641ecba3" />
+
+
 ---
 
 ## 🛠️ Tech Stack
